@@ -1,0 +1,60 @@
+﻿@using WMSApplication.CustomModels;
+
+@model PagingModel
+
+
+<div class="container btn-group" border-radius:10px; height:45px">
+
+    <div class="col-4 p-0 justify-content-end mt-1">
+        <form asp-action="Index">
+            <span class="btn-group">
+                <input class="form-control" type="text" name="searchText" value="@ViewBag.SearchText" placeholder="Search..." />
+                <input class="p-1 ml-2 btn btn-sm btn-primary" style="border-radius:10px" type="submit" value="search" />
+            </span>
+        </form>
+    </div>
+
+    <div class="container mt-1">
+        <ul class="pagination justify-content-end">
+
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.Action" asp-route-pageIndex="1" asp-route-pageSize="@Model.PageSize" asp-route-seacrhText="@Model.SearchText" asp-route-sortExpression="@Model.SortExpression">First</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.Action" asp-route-pageIndex="@(Model.CurrentPage - 1)" asp-route-pageSize="@Model.PageSize" asp-route-seacrhText="@Model.SearchText" asp-route-sortExpression="@Model.SortExpression">Previous</a>
+                </li>
+
+            }
+
+            @for (var pge = Model.StartPage; pge <= Model.EndPage; pge++)
+            {
+                <li class="page-item @(pge == Model.CurrentPage ? "active" : "")">
+                    @if (pge != Model.CurrentPage)
+                    {
+                        <a class="page-link" asp-action="@Model.Action" asp-route-pageIndex="@pge" asp-route-pageSize="@Model.PageSize" asp-route-seacrhText="@Model.SearchText" asp-route-sortExpression="@Model.SortExpression">@pge</a>
+                    }
+                    else
+                    {
+                        <a class="page-link">@pge</a>
+                    }
+
+                </li>
+
+            }
+
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.Action" asp-route-pageIndex="@(Model.CurrentPage + 1)" asp-route-pageSize="@Model.PageSize" asp-route-seacrhText="@Model.SearchText" asp-route-sortExpression="@Model.SortExpression">Next</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.Action" asp-route-pageIndex="@Model.TotalPages" asp-route-pageSize="@Model.PageSize" asp-route-seacrhText="@Model.SearchText" asp-route-sortExpression="@Model.SortExpression">Last</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

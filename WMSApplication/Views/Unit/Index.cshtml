@@ -4,7 +4,9 @@
 @{
     ViewData["Title"] = "Index";
 
-    SortingModel sortingModel = (SortingModel)ViewData["SortingModel"];
+    SortingModel sortingModel = (SortingModel)ViewData["Sorting"];
+
+    PagingModel pagingModel = (PagingModel)ViewData["Paging"];
 
     int sequence = 1;
 }
@@ -16,48 +18,66 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true"></i>
-                <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
-                    @Html.DisplayNameFor(model => model.Name)
-                </a>
-                
-            </th>
-            <th>
-                <i class="@sortingModel.GetColumn("description").SortIcon" aria-hidden="true"></i>
-                <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("description").SortExpression">
-                    @Html.DisplayNameFor(model => model.Description)
-                </a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @sequence.ToString()
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
 
-        sequence = sequence + 1;
-}
-    </tbody>
-</table>
+
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_TopBar" model="@pagingModel" />
+    </div>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true"></i>
+                    <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </a>
+
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("description").SortIcon" aria-hidden="true"></i>
+                    <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("description").SortExpression">
+                        @Html.DisplayNameFor(model => model.Description)
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @sequence.ToString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+
+                sequence = sequence + 1;
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_BottomBar" model="@pagingModel" />
+    </div>
+</div>

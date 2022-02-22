@@ -18,7 +18,32 @@ namespace WMSApplication.Controllers
         {
             _repository = repository;
         }
-        public async Task<IActionResult> Index(string sortExpression = "")
+        public async Task<IActionResult> Index(string sortExpression = "", string searchText = "", int pageIndex = 1, int pageSize = 5)
+        {
+            SortingModel sorting = SortingSetup(sortExpression);
+
+            IEnumerable<Unit> units = await _repository.Unit.FindAllAsync(StringHelper.ToUpperFirstString(sorting.SortedProperty), sorting.SortedOrder, searchText);
+
+            PagingModel paging = PagingSetup(sortExpression, pageIndex, pageSize, units);
+
+            units = units.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewData["Sorting"] = sorting;
+            ViewData["Paging"] = paging;
+            ViewBag.SearchText = searchText;
+
+            return View(units);
+        }
+
+        private static PagingModel PagingSetup(string sortExpression, int pageIndex, int pageSize, IEnumerable<Unit> units)
+        {
+            PagingModel paging = new PagingModel(units.Count(), pageIndex, pageSize);
+            paging.SortExpression = sortExpression;
+
+            return paging;
+        }
+
+        private static SortingModel SortingSetup(string sortExpression)
         {
             SortingModel sortingModel = new SortingModel();
 
@@ -26,14 +51,7 @@ namespace WMSApplication.Controllers
             sortingModel.SetColumn(UnitModelConstant.Property.description);
             sortingModel.SortingParam(sortExpression);
 
-            ViewData["SortingModel"] = sortingModel;
-
-            string sortedProperty = StringHelper.ToUpperFirstString(sortingModel.SortedProperty);
-
-            IEnumerable<Unit> units = await _repository.Unit.FindAllAsync(sortedProperty, sortingModel.SortedOrder);
-
-            return View(units);
+            return sortingModel;
         }
-
     }
 }
