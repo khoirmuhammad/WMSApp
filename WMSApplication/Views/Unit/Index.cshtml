@@ -7,77 +7,101 @@
     SortingModel sortingModel = (SortingModel)ViewData["Sorting"];
 
     PagingModel pagingModel = (PagingModel)ViewData["Paging"];
-
-    int sequence = 1;
 }
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-
-
-<div class="row">
-    <div class="col-12">
-        <partial name="_TopBar" model="@pagingModel" />
+<div class="container-fluid btn-group">
+    <div class="col-10">
+        <h3>Index</h3>
+    </div>
+    <div class="col-2 justify-content-end">
+        <p><a asp-action="Create" class="btn btn-success">Create New</a></p>
     </div>
 </div>
 
-<div class="row">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true"></i>
-                    <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
-                        @Html.DisplayNameFor(model => model.Name)
-                    </a>
+<hr />
 
-                </th>
-                <th>
-                    <i class="@sortingModel.GetColumn("description").SortIcon" aria-hidden="true"></i>
-                    <a asp-action="Index" asp-route-sortExpression="@sortingModel.GetColumn("description").SortExpression">
-                        @Html.DisplayNameFor(model => model.Description)
-                    </a>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="row">
+        <div class="col-12">
+            <partial name="_TopBar" model="@pagingModel" />
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @sequence.ToString()
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                    </td>
+                    <th>
+                        <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                        <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </a>
+
+                    </th>
+                    <th>
+                        <i class="@sortingModel.GetColumn("description").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                        <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("description").SortExpression">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </a>
+                    </th>
+                    <th></th>
                 </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                <span class="btn btn-sm btn-outline-info">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <span class="btn btn-sm btn-outline-warning">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">
+                                <span class="btn btn-sm btn-outline-danger">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
 
-                sequence = sequence + 1;
-            }
-        </tbody>
-    </table>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <partial name="_BottomBar" model="@pagingModel" />
+                }
+            </tbody>
+        </table>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-12">
+            <partial name="_BottomBar" model="@pagingModel" />
+        </div>
+    </div>
+
+@section scripts {
+    <script type="text/javascript">
+        function openSuccessModal(message) {
+            let ctrlDiv = document.getElementById('mySuccessModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#mySuccessModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            let message = "@TempData["success"]";
+            if (message) {
+                openSuccessModal(message)
+            }
+        });
+    </script>
+}

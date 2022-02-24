@@ -1,0 +1,111 @@
+﻿@using WMSApplication.CustomModels;
+@model IEnumerable<WMSApplication.Models.ProductCategory>
+
+@{
+    ViewData["Title"] = "Index";
+
+    SortingModel sortingModel = (SortingModel)ViewData["Sorting"];
+
+    PagingModel pagingModel = (PagingModel)ViewData["Paging"];
+}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
+
+<div class="container-fluid btn-group">
+    <div class="col-10">
+        <h3>Index</h3>
+    </div>
+    <div class="col-2 justify-content-end">
+        <p><a asp-action="Create" class="btn btn-success">Create New</a></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_TopBar" model="@pagingModel" />
+    </div>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <i class="@sortingModel.GetColumn("code").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("code").SortExpression">
+                        @Html.DisplayNameFor(model => model.Code)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("description").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("description").SortExpression">
+                        @Html.DisplayNameFor(model => model.Description)
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-info">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Details" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-warning">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Delete" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_BottomBar" model="@pagingModel" />
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function openSuccessModal(message) {
+            let ctrlDiv = document.getElementById('mySuccessModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#mySuccessModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            let message = "@TempData["success"]";
+            if (message) {
+                openSuccessModal(message)
+            }
+        });
+    </script>
+}

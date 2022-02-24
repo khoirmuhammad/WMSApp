@@ -77,14 +77,14 @@ namespace WMSApplication.CustomModels
         }
 
         // Readonly Properties by private on setter.
-        public int TotalItems { get; private set; }
-        public int CurrentPage { get; private set; }
-        public int PageSize { get; private set; }
-        public int TotalPages { get; private set; }
+        public int TotalItems { get; private set; } // All records / data had by datasource
+        public int CurrentPage { get; private set; } // page being shown on each pagination
+        public int PageSize { get; private set; } // page size can be 5, 10, 15 and so on
+        public int TotalPages { get; private set; } // all of pages had by pagination
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
-        public int StartRecord { get; private set; }
-        public int EndRecord { get; private set; }
+        public int StartRecord { get; private set; } // start record on each pagination
+        public int EndRecord { get; private set; } // end record on each pagination
 
         // Public Properties
         public string Action { get; set; } = "Index";

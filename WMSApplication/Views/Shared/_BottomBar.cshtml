@@ -2,14 +2,14 @@
 
 @model PagingModel
 
-<div class="container m-0 p-0 btn-group" style="background-color:black; border-radius:10px; height:45px; color:wheat">
+<div class="container m-0 p-0 btn-group" style="background: linear-gradient(to left, #28340B, #197696); border-radius: 10px; height: 50px; color: white">
     <div class="col-4 btn-group p-1 m-1">
         Showing @Model.StartRecord to @Model.EndRecord of @Model.TotalItems Rows
     </div>
 
     <div class="col-3 btn-group justify-content-end">
         <span class="col-7 mt-2 p-0">
-            Rows per page
+            Rows Per Page
         </span>
         <span class="col-5 p-1">
             <select class="form-control" id="pageSelector" asp-items="Model.GetPageSize()" onchange="ChangePageSize(this)"></select>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="col-5 btn-group justify-content-end m-2">
-        Showing @Model.CurrentPage / @Model.TotalPages Pages
+        Showing @Model.CurrentPage of @Model.TotalPages Pages
     </div>
 </div>
 

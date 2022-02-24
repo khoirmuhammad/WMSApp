@@ -18,8 +18,10 @@ namespace WMSApplication.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UnitConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
         }
 
         public DbSet<Unit> Units { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
     }
 }

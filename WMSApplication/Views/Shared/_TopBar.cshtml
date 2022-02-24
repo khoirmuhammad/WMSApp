@@ -2,14 +2,37 @@
 
 @model PagingModel
 
+<style>
+    .page-item.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background-color: #007bff;
+    }
 
-<div class="container btn-group" border-radius:10px; height:45px">
+    .page-link {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #055354;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+    }
+</style>
+
+
+<div class="container btn-group" style="background-color:#d7dbdb; border-radius: 10px; height: 45px;">
 
     <div class="col-4 p-0 justify-content-end mt-1">
         <form asp-action="Index">
             <span class="btn-group">
                 <input class="form-control" type="text" name="searchText" value="@ViewBag.SearchText" placeholder="Search..." />
-                <input class="p-1 ml-2 btn btn-sm btn-primary" style="border-radius:10px" type="submit" value="search" />
+
+                <span class="ml-2 btn-group btn-primary" style="border-radius:10px">
+                    <i class="pl-2 fa fa-search align-self-center" aria-hidden="true"></i>
+                    <input type="submit" class="btn btn-sm font-weight-bold text-white" value="Search" />
+                </span>
             </span>
         </form>
     </div>
@@ -58,3 +81,4 @@
         </ul>
     </div>
 </div>
+

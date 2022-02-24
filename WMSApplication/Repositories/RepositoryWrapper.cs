@@ -10,7 +10,9 @@ namespace WMSApplication.Repositories
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private ApplicationContext _applicationContext;
-        private IUnitRepository _userRepository;
+
+        private IUnitRepository _unitRepository;
+        private IProductCategoryRepository _producCategory;
 
         public RepositoryWrapper(ApplicationContext applicationContext)
         {
@@ -21,10 +23,21 @@ namespace WMSApplication.Repositories
         {
             get
             {
-                if (_userRepository == null)
-                    _userRepository = new UnitRepository(_applicationContext);
+                if (_unitRepository == null)
+                    _unitRepository = new UnitRepository(_applicationContext);
 
-                return _userRepository;
+                return _unitRepository;
+            }
+        }
+
+        public IProductCategoryRepository ProductCategory
+        {
+            get
+            {
+                if (_producCategory == null)
+                    _producCategory = new ProductCategoryRepository(_applicationContext);
+
+                return _producCategory;
             }
         }
 
