@@ -21,11 +21,22 @@ namespace WMSApplication.Repositories
             return await base.FindAll().ToListAsync();
         }
 
-        public async Task<IEnumerable<Unit>> FindAllAsync(string sortProperty, SortOrder sortOrder)
+        public async Task<IEnumerable<Unit>> FindAllAsync(string sortProperty, SortOrder sortOrder, string searchText = "")
         {
-            IEnumerable<Unit> units = await base.FindAll().ToListAsync();
+            IEnumerable<Unit> units;
 
-            return DynamicOrderQuery(units, sortProperty, sortOrder);
+            if (string.IsNullOrEmpty(searchText))
+            {
+                units = await base.FindAll().ToListAsync();
+            }
+            else
+            {
+                units = await base.FindAll().Where(x => x.Name.Equals(searchText) || x.Description.Equals(searchText)).ToListAsync();
+            }
+
+            units = PerformSort(units, sortProperty, sortOrder);
+
+            return units;
         }
 
         public async Task<Unit> FindAsyncById(int id)
@@ -50,7 +61,7 @@ namespace WMSApplication.Repositories
 
         #region Custom Method
 
-        public IEnumerable<Unit> DynamicOrderQuery(IEnumerable<Unit> source, string propertyName, SortOrder sortOrder)
+        private IEnumerable<Unit> DynamicOrderQuery(IEnumerable<Unit> source, string propertyName, SortOrder sortOrder)
         {
             if (sortOrder == SortOrder.Ascending)
             {
@@ -62,11 +73,18 @@ namespace WMSApplication.Repositories
             }
         }
 
-        public IEnumerable<Unit> DynamicWhereQuery(IEnumerable<Unit> source, string propertyName, string propertyValue)
+        private IEnumerable<Unit> DynamicWhereQuery(IEnumerable<Unit> source, string propertyName, string propertyValue)
         {
             return source.Where(src => { return src.GetType().GetProperty(propertyName).GetValue(src, null).ToString().StartsWith(propertyValue); });
         }
 
+        #endregion
+
+        #region Support Method
+        private IEnumerable<Unit> PerformSort(IEnumerable<Unit> source, string propertyName, SortOrder sortOrder)
+        {
+            return DynamicOrderQuery(source, propertyName, sortOrder);
+        }
         #endregion
     }
 }

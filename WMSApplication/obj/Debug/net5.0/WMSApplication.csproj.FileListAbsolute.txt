@@ -145,3 +145,5 @@ C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\WMSApplication.dll
 C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\ref\WMSApplication.dll
 C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\WMSApplication.pdb
 C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\WMSApplication.genruntimeconfig.cache
+C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\Razor\Views\Shared\_TopBar.cshtml.g.cs
+C:\Baseline\WMSApplication\WMSApplication\obj\Debug\net5.0\Razor\Views\Shared\_BottomBar.cshtml.g.cs

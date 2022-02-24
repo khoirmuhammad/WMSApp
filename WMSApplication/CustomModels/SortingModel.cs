@@ -16,6 +16,7 @@ namespace WMSApplication.CustomModels
         private string DownSortIcon = "fa fa-arrow-down";
         public SortOrder SortedOrder { get; set; }
         public string SortedProperty { get; set; }
+        public string SortExpression { get; private set; }
 
         private List<SortableColumn> SortableColumns = new List<SortableColumn>();
 
@@ -53,6 +54,9 @@ namespace WMSApplication.CustomModels
             {
                 sortExpression = this.SortedProperty;
             }
+
+            sortExpression = sortExpression.ToLower();
+            SortExpression = sortExpression;
 
             foreach (SortableColumn sortableColumn in this.SortableColumns)
             {

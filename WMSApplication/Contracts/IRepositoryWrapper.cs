@@ -8,6 +8,7 @@ namespace WMSApplication.Contracts
     public interface IRepositoryWrapper
     {
         IUnitRepository Unit { get; }
+        IProductCategoryRepository ProductCategory { get; }
 
         Task SaveAsync();
     }
