@@ -9,16 +9,20 @@ using WMSApplication.Helpers;
 using WMSApplication.Models;
 using WMSApplication.Constants;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace WMSApplication.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IRepositoryWrapper _repository;
+        private readonly IWebHostEnvironment _webhost;
 
-        public ProductController(IRepositoryWrapper repository)
+        public ProductController(IRepositoryWrapper repository, IWebHostEnvironment webhost)
         {
             _repository = repository;
+            _webhost = webhost;
         }
 
         private int _pageSize = 5;
@@ -81,6 +85,11 @@ namespace WMSApplication.Controllers
         {
             try
             {
+                Dictionary<string,string> imgProcessing = UploadPicture(product);
+
+                product.Picture = imgProcessing["picture"].ToString();
+                product.PictureExtension = imgProcessing["pictureExtension"].ToString();
+                product.PicturePath = imgProcessing["picturePath"].ToString();
                 product.CreatedBy = "admin";
                 product.ModifiedBy = "admin";
                 product.CreatedDate = DateTime.Now;
@@ -166,6 +175,8 @@ namespace WMSApplication.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
 
         #region Support Methods
         private static PagingModel PagingSetup(string sortExpression, int pageIndex, int pageSize, IEnumerable<Product> products)
@@ -268,6 +279,34 @@ namespace WMSApplication.Controllers
             });
 
             return items;
+        }
+
+        private Dictionary<string, string> UploadPicture(Product product)
+        {
+            string uniqueFilename = string.Empty;
+            string uploadFolder = string.Empty;
+            string filePath = string.Empty;
+
+            if (product.UploadedPicture != null)
+            {
+                uploadFolder = Path.Combine(_webhost.WebRootPath, "products");
+
+                uniqueFilename = Guid.NewGuid().ToString() + "_" + product.UploadedPicture.FileName;
+
+                filePath = Path.Combine(uploadFolder, uniqueFilename);
+
+                using(var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    product.UploadedPicture.CopyTo(fileStream);
+                }
+            }
+
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            result["picture"] = uniqueFilename;
+            result["pictureExtension"] = Path.GetExtension(product.UploadedPicture.FileName);
+            result["picturePath"] = filePath;
+
+            return result;
         }
         #endregion
     }

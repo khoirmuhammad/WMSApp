@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,6 +32,13 @@ namespace WMSApplication.Models
 
         [Display(Name = "Whole Price")]
         public decimal WholePrice { get; set; }
+
+        public string Picture { get; set; }
+        public string PictureExtension { get; set; }
+        public string PicturePath { get; set; }
+
+        [NotMapped]
+        public IFormFile UploadedPicture { get; set; }
 
         [Display(Name = "Product Category")]
         public string CategoryCode { get; set; }

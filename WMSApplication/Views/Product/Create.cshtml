@@ -6,7 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Create" id="createForm">
+        <form asp-action="Create" id="createForm" enctype="multipart/form-data" onsubmit="return ValidateForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="row">
@@ -79,6 +79,22 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="form-group col-4 pt-0 mt-0">
+                    <div class="custom-file">
+                        <input type="hidden" id="PicturePath" asp-for="PicturePath" value="" />
+                        <input asp-for="UploadedPicture" class="custom-file-input" id="UploadedPicture" />
+                        <label class="custom-file-label" for="UploadedPicture" id="UploadedPictureCaption">Choose Picture</label>
+                        <span asp-validation-for="UploadedPicture" class="text-danger" id="UploadedPictureValidation"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4 row">
+                <div class="form-group col-12 justify-content-center align-middle mb-0 pb-0">
+                    <img id="previewPicture" src="~/images/no-image-icon.jpg" alt="Logo-Image" width="200" height="200" style="border:1px;margin-top:10px; margin-bottom:20px" />
+                </div>
+            </div>
 
             <div class="form-group btn-group">
                 <input type="button" id="btnSubmit" value="Save Changes" class="btn btn-primary" />
@@ -99,9 +115,33 @@
             }
         });
 
-        //$("body").on("submit", "#createForm", function () {
-        //    return confirm("Do you want to save data?");
-        //});
+        
+        $('.custom-file-input').on('change', function () {
+            debugger;
+            // get file name
+            let filename = $(this).val().split('\\').pop();
+
+            // get file size
+            let pictSize = $(this)[0].files[0].size;
+
+            // get file extension
+            let pictExt = filename.split('.').pop();
+
+            // image validation
+            IsPictureValid(pictSize, pictExt);
+
+            // if pass the validation, set hidden value
+            document.getElementById('PicturePath').value = filename;
+
+            // in order to set filename into label picture
+            $(this).siblings('.custom-file-label').addClass('selected').html(filename);
+
+            // in order to set image in preview
+            document.getElementById('previewPicture').src = window.URL.createObjectURL(this.files[0]);
+
+            
+        })
+
 
         $('#btnSubmit').click(function () {
             // Modal is defined in _Layout.cshtml
@@ -126,6 +166,46 @@
             let ctrlDiv = document.getElementById('myFailedModalAlertBody');
             ctrlDiv.innerHTML = message;
             $('#myFailedModal').modal('show');
+        }
+
+        function IsPictureValid(pictSize, pictExt) {
+            let error = '';
+            error = IsPictureSizeValid(pictSize);
+            error = IsPictureExtensionValid(pictExt);
+
+            if (error != '') {
+                document.getElementById('UploadedPictureValidation').innerHTML = error;
+                return;
+            } else {
+                document.getElementById('UploadedPictureValidation').innerHTML = '';
+            }
+        }
+
+        function IsPictureSizeValid(pictSize) {
+            let pictSizeInKb = Math.round(pictSize / 1024);
+            if (pictSizeInKb > 100) {
+                return "File size over 100 Kb is not allowed";
+            }
+
+            return '';
+        }
+
+        function IsPictureExtensionValid(pictExt) {
+            if (pictExt != 'jpg' && pictExt != 'png') {
+                return 'File should be jpg or png in extension';
+            }
+
+            return '';
+        }
+
+        function ValidateForm() {
+            if (document.getElementById('PicturePath').value == '') {
+                document.getElementById('UploadedPictureValidation').innerHTML = 'Picture unable to be empty';
+
+                return false;
+            }
+
+            return true;
         }
     </script>
 }

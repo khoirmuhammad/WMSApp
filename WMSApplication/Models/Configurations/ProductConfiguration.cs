@@ -21,6 +21,9 @@ namespace WMSApplication.Models.Configurations
             builder.Property(p => p.AllocationType).IsRequired().HasMaxLength(10);
             builder.Property(p => p.LoosePrice).IsRequired();
             builder.Property(p => p.WholePrice).IsRequired();
+            builder.Property(p => p.Picture).HasMaxLength(250);
+            builder.Property(p => p.PictureExtension).HasMaxLength(5);
+            builder.Property(p => p.PicturePath).HasMaxLength(500);
 
             // one product category can be used by product in many data
             // product category : Food (one)

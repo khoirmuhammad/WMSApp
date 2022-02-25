@@ -80,7 +80,9 @@
                         @Html.DisplayNameFor(model => model.UnitCode)
                     </a>
                 </th>
-                
+                <th>
+                    @Html.DisplayNameFor(model => model.Picture)
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -112,7 +114,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.UnitCode)
                     </td>
-                    
+                    <td>
+                        <img src="~/products/@item.Picture" style="width:75px;height:75px" />
+                    </td>
                     <td>
                         <a asp-action="Edit" asp-route-code="@item.Code">
                             <span class="btn btn-sm btn-outline-info">
