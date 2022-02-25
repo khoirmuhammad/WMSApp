@@ -1,0 +1,132 @@
+﻿@model WMSApplication.Models.Product
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" id="createForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" readonly />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="WholeUnit" class="control-label"></label>
+                    <input asp-for="WholeUnit" class="form-control" readonly />
+                    <span asp-validation-for="WholeUnit" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Weight" class="control-label"></label>
+                    <input asp-for="Weight" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="CategoryCode" class="control-label"></label>
+                    <select asp-for="CategoryCode" class="form-control" asp-items="ViewBag.ProductCategories"></select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="UnitCode" class="control-label"></label>
+                    <select asp-for="UnitCode" class="form-control" asp-items="ViewBag.Units"></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="LooseQty" class="control-label"></label>
+                    <input asp-for="LooseQty" class="form-control" />
+                    <span asp-validation-for="LooseQty" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="WholeQty" class="control-label"></label>
+                    <input asp-for="WholeQty" class="form-control" />
+                    <span asp-validation-for="WholeQty" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="AllocationType" class="control-label"></label>
+                    <select asp-for="AllocationType" class="form-control" asp-items="ViewBag.AllocationType"></select>
+                    <span asp-validation-for="AllocationType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="LoosePrice" class="control-label"></label>
+                    <input asp-for="LoosePrice" class="form-control" />
+                    <span asp-validation-for="LoosePrice" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="WholePrice" class="control-label"></label>
+                    <input asp-for="WholePrice" class="form-control" />
+                    <span asp-validation-for="WholePrice" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Remark" class="control-label"></label>
+                    <textarea asp-for="Remark" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Remark" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group btn-group">
+                <input type="button" id="btnSubmit" value="Save Changes" class="btn btn-primary" />
+                <a class="btn btn-dark" asp-action="Index" asp-route-pageIndex="@TempData["currentPage"]"> Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let message = "@TempData["failed"]";
+            if (message) {
+                openFailedModal(message)
+            }
+        });
+
+        //$("body").on("submit", "#createForm", function () {
+        //    return confirm("Do you want to save data?");
+        //});
+
+        $('#btnSubmit').click(function () {
+            // Modal is defined in _Layout.cshtml
+            let ctrlDiv = document.getElementById('myConfirmModalAlertBody');
+            ctrlDiv.innerHTML = 'Do you want to save data?';
+            $("#confirmModal").modal('show');
+        });
+
+        $("#modal-btn-yes").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            $('#createForm').submit();
+        });
+
+        $("#modal-btn-no").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            return false;
+        });
+
+        function openFailedModal(message) {
+            let ctrlDiv = document.getElementById('myFailedModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#myFailedModal').modal('show');
+        }
+    </script>
+}
+

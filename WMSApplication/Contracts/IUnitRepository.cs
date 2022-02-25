@@ -10,8 +10,8 @@ namespace WMSApplication.Contracts
     public interface IUnitRepository
     {
         Task<IEnumerable<Unit>> FindAllAsync();
-        Task<IEnumerable<Unit>> FindAllAsync(string sortPropert, SortOrder sortOrder, string searchText = "");
-        Task<Unit> FindAsyncById(int id);
+        Task<IEnumerable<Unit>> FindAllAsync(string sortProperty, SortOrder sortOrder, string searchText = "");
+        Task<Unit> FindAsyncById(string code);
         void Create(Unit unit);
         void Update(Unit unit);
         void Delete(Unit unit);

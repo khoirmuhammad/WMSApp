@@ -13,8 +13,8 @@ namespace WMSApplication.Models.Configurations
         {
             builder.ToTable("ProductCategory");
 
-            builder.HasKey(pc => pc.Id);
-            builder.Property(pc => pc.Code).IsUnicode().IsRequired().HasMaxLength(10);
+            builder.HasKey(pc => pc.Code);
+            builder.Property(pc => pc.Code).IsRequired().HasMaxLength(10);
             builder.Property(pc => pc.Name).IsRequired().HasMaxLength(50);
             builder.Property(pc => pc.Description).HasMaxLength(100);
         }

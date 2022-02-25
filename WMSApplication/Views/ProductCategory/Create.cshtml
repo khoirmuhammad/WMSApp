@@ -6,11 +6,11 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="createForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
+                <input asp-for="Code" class="form-control" readonly />
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,29 +24,52 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group btn-group">
-                <input type="submit" value="Save Changes" class="btn btn-primary" />
+                <input type="button" id="btnSubmit" value="Save Changes" class="btn btn-primary" />
                 <a class="btn btn-dark" asp-action="Index" asp-route-pageIndex="@TempData["currentPage"]"> Back</a>
             </div>
         </form>
     </div>
 </div>
 
+
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script type="text/javascript">
-            function openFailedModal(message) {
-                let ctrlDiv = document.getElementById('myFailedModalAlertBody');
-                ctrlDiv.innerHTML = message;
-                $('#myFailedModal').modal('show');
+        $(document).ready(function () {
+            let message = "@TempData["failed"]";
+            if (message) {
+                openFailedModal(message)
             }
+        });
 
-            $(document).ready(function () {
-                let message = "@TempData["failed"]";
-                if (message) {
-                    openFailedModal(message)
-                }
-            });
+        //$("body").on("submit", "#createForm", function () {
+        //    return confirm("Do you want to save data?");
+        //});
+
+        $('#btnSubmit').click(function () {
+            // Modal is defined in _Layout.cshtml
+            let ctrlDiv = document.getElementById('myConfirmModalAlertBody');
+            ctrlDiv.innerHTML = 'Do you want to save data?';
+            $("#confirmModal").modal('show');
+        });
+
+        $("#modal-btn-yes").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            $('#createForm').submit();
+        });
+
+        $("#modal-btn-no").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            return false;
+        });
+
+        function openFailedModal(message) {
+            let ctrlDiv = document.getElementById('myFailedModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#myFailedModal').modal('show');
+        }
     </script>
 }
-

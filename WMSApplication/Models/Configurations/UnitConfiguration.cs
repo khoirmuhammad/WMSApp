@@ -13,7 +13,7 @@ namespace WMSApplication.Models.Configurations
         {
             builder.ToTable("Unit");
 
-            builder.HasKey(u => u.Id);
+            builder.HasKey(u => u.Code);
             builder.Property( u=> u.Name).IsRequired().HasMaxLength(10);
             builder.Property(u => u.Description).IsRequired().HasMaxLength(50);
         }

@@ -11,8 +11,9 @@ namespace WMSApplication.Repositories
     {
         private ApplicationContext _applicationContext;
 
-        private IUnitRepository _unitRepository;
-        private IProductCategoryRepository _producCategory;
+        private IUnitRepository _unit;
+        private IProductCategoryRepository _productCategory;
+        private IProductRepository _product;
 
         public RepositoryWrapper(ApplicationContext applicationContext)
         {
@@ -23,10 +24,10 @@ namespace WMSApplication.Repositories
         {
             get
             {
-                if (_unitRepository == null)
-                    _unitRepository = new UnitRepository(_applicationContext);
+                if (_unit == null)
+                    _unit = new UnitRepository(_applicationContext);
 
-                return _unitRepository;
+                return _unit;
             }
         }
 
@@ -34,10 +35,21 @@ namespace WMSApplication.Repositories
         {
             get
             {
-                if (_producCategory == null)
-                    _producCategory = new ProductCategoryRepository(_applicationContext);
+                if (_productCategory == null)
+                    _productCategory = new ProductCategoryRepository(_applicationContext);
 
-                return _producCategory;
+                return _productCategory;
+            }
+        }
+
+        public IProductRepository Product
+        {
+            get
+            {
+                if (_product == null)
+                    _product = new ProductRepository(_applicationContext);
+
+                return _product;
             }
         }
 

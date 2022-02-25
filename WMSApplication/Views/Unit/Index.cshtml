@@ -9,7 +9,6 @@
     PagingModel pagingModel = (PagingModel)ViewData["Paging"];
 }
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
 
 
 <div class="container-fluid btn-group">
@@ -34,6 +33,13 @@
             <thead>
                 <tr>
                     <th>
+                        <i class="@sortingModel.GetColumn("code").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                        <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("code").SortExpression">
+                            @Html.DisplayNameFor(model => model.Code)
+                        </a>
+
+                    </th>
+                    <th>
                         <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true" style="font-size:12px"></i>
                         <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
                             @Html.DisplayNameFor(model => model.Name)
@@ -52,31 +58,34 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">
-                                <span class="btn btn-sm btn-outline-info">
-                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                            <a asp-action="Details" asp-route-id="@item.Id">
-                                <span class="btn btn-sm btn-outline-warning">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id">
-                                <span class="btn btn-sm btn-outline-danger">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </span>
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-info">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Details" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-warning">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Delete" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
 
                 }
             </tbody>

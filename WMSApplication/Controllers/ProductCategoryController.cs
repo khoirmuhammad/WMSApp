@@ -47,9 +47,23 @@ namespace WMSApplication.Controllers
             return View(productCategory);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             ProductCategory productCategory = new ProductCategory();
+
+            IEnumerable<ProductCategory> productCategories = await _repository.ProductCategory.FindAllAsync();
+
+            if (productCategories.Count().Equals(0))
+            {
+                productCategory.Code = "C-001";
+            }
+            else
+            {
+                string lastCode = productCategories.OrderByDescending(x => x.Code).Take(1).FirstOrDefault().Code;
+                int currSequence = Convert.ToInt32(lastCode.Split("-")[1]);
+
+                productCategory.Code = StringHelper.GenerateUniqueCode("C-", 3, currSequence);
+            }
 
             return View(productCategory);
         }
@@ -66,7 +80,9 @@ namespace WMSApplication.Controllers
             }
             catch (Exception ex)
             {
+                TempData["failed"] = "Saving Data Failed";
 
+                return View();
             }
 
             return RedirectToAction(nameof(Index));
@@ -92,7 +108,9 @@ namespace WMSApplication.Controllers
             }
             catch (Exception ex)
             {
+                TempData["failed"] = "Modifying Data Failed";
 
+                return View();
             }
 
             int currPage = 1;
@@ -111,7 +129,7 @@ namespace WMSApplication.Controllers
             return View(productCategory);
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(ProductCategory productCategory)
         {
             try
@@ -122,6 +140,9 @@ namespace WMSApplication.Controllers
             catch (Exception ex)
             {
 
+                TempData["failed"] = "Deleting Data Failed";
+
+                return View();
             }
 
             return RedirectToAction(nameof(Index));
