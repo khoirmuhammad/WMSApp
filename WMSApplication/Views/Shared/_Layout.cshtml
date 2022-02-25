@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - WMSApplication</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
 </head>
 
 @{
@@ -28,10 +29,18 @@
                                 <a class="nav-link @menuTextColor" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @menuTextColor" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link @menuTextColor" asp-area="" asp-controller="Privacy" asp-action="Privacy">Privacy</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link @menuTextColor" asp-area="" asp-controller="Unit" asp-action="Index">Unit</a>
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @menuTextColor" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Master
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Unit" asp-action="Index">Unit of Measurement (UOM)</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="ProductCategory" asp-action="Index">Product Category</a>
+                                    <a class="dropdown-item nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product Master</a>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -81,6 +90,25 @@
                 </div>
             </div>
             <!-- Failed Modal End-->
+            <!-- Confirmation Modal Start-->
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myConfirmModal" aria-hidden="true" id="confirmModal">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <i class="fa fa-question" style="font-size:32px;color:#077e52;"> </i>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body alert alert-info" id="myConfirmModalAlertBody">
+                            <label id="lblMessage"></label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="modal-btn-yes">Yes</button>
+                            <button type="button" class="btn btn-dark" id="modal-btn-no">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Confirmation Modal End-->
 
             @RenderBody()
         </main>

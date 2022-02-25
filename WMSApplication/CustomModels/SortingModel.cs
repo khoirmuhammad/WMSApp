@@ -55,7 +55,7 @@ namespace WMSApplication.CustomModels
                 sortExpression = this.SortedProperty;
             }
 
-            sortExpression = sortExpression.ToLower();
+            //sortExpression = sortExpression.ToLower();
             SortExpression = sortExpression;
 
             foreach (SortableColumn sortableColumn in this.SortableColumns)

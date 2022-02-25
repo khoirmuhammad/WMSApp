@@ -1,0 +1,164 @@
+﻿@using WMSApplication.CustomModels;
+@model IEnumerable<WMSApplication.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+
+    SortingModel sortingModel = (SortingModel)ViewData["Sorting"];
+
+    PagingModel pagingModel = (PagingModel)ViewData["Paging"];
+}
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
+
+<div class="container-fluid btn-group">
+    <div class="col-10">
+        <h3>Index</h3>
+    </div>
+    <div class="col-2 justify-content-end">
+        <p><a asp-action="Create" class="btn btn-success">Create New</a></p>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_TopBar" model="@pagingModel" />
+    </div>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <i class="@sortingModel.GetColumn("name").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("name").SortExpression">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("weight").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("weight").SortExpression">
+                        @Html.DisplayNameFor(model => model.Weight)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("wholeQty").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("wholeQty").SortExpression">
+                        @Html.DisplayNameFor(model => model.WholeQty)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("allocationType").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("allocationType").SortExpression">
+                        @Html.DisplayNameFor(model => model.AllocationType)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("loosePrice").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("loosePrice").SortExpression">
+                        @Html.DisplayNameFor(model => model.LoosePrice)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("wholePrice").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("wholePrice").SortExpression">
+                        @Html.DisplayNameFor(model => model.WholePrice)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("categoryCode").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("categoryCode").SortExpression">
+                        @Html.DisplayNameFor(model => model.CategoryCode)
+                    </a>
+                </th>
+                <th>
+                    <i class="@sortingModel.GetColumn("unitCode").SortIcon" aria-hidden="true" style="font-size:12px"></i>
+                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("unitCode").SortExpression">
+                        @Html.DisplayNameFor(model => model.UnitCode)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Picture)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Weight)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WholeQty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocationType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LoosePrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WholePrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UnitCode)
+                    </td>
+                    <td>
+                        <img src="~/products/@item.Picture" style="width:75px;height:75px" />
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-info">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Details" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-warning">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Delete" asp-route-code="@item.Code">
+                            <span class="btn btn-sm btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <partial name="_BottomBar" model="@pagingModel" />
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function openSuccessModal(message) {
+            let ctrlDiv = document.getElementById('mySuccessModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#mySuccessModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            let message = "@TempData["success"]";
+            if (message) {
+                openSuccessModal(message)
+            }
+        });
+    </script>
+}

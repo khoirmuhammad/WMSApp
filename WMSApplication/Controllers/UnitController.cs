@@ -40,9 +40,9 @@ namespace WMSApplication.Controllers
             return View(units);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(string code)
         {
-            Unit unit = await _repository.Unit.FindAsyncById(id);
+            Unit unit = await _repository.Unit.FindAsyncById(code);
             return View(unit);
         }
 
@@ -67,7 +67,7 @@ namespace WMSApplication.Controllers
             }
             catch(Exception ex)
             {
-                TempData["failed"] = ex.Message;
+                TempData["failed"] = "Saving Data Failed";
 
                 return View();
             }
@@ -75,9 +75,9 @@ namespace WMSApplication.Controllers
             
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string code)
         {
-            Unit unit = await _repository.Unit.FindAsyncById(id);
+            Unit unit = await _repository.Unit.FindAsyncById(code);
             TempData.Keep();
             return View(unit);
         }
@@ -95,7 +95,9 @@ namespace WMSApplication.Controllers
             }
             catch(Exception ex)
             {
+                TempData["failed"] = "Modifying Data Failed";
 
+                return View();
             }
 
             int currPage = 1;
@@ -107,14 +109,14 @@ namespace WMSApplication.Controllers
             return RedirectToAction(nameof(Index), new { pageIndex = currPage, pageSize = _pageSize });
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string code)
         {
-            Unit unit = await _repository.Unit.FindAsyncById(id);
+            Unit unit = await _repository.Unit.FindAsyncById(code);
             TempData.Keep();
             return View(unit);
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(Unit unit)
         {
             try
@@ -124,7 +126,9 @@ namespace WMSApplication.Controllers
             }
             catch(Exception ex)
             {
+                TempData["failed"] = "Deleting Data Failed";
 
+                return View();
             }
 
             return RedirectToAction(nameof(Index));
@@ -143,6 +147,7 @@ namespace WMSApplication.Controllers
         {
             SortingModel sortingModel = new SortingModel();
 
+            sortingModel.SetColumn(UnitModelConstant.Property.code);
             sortingModel.SetColumn(UnitModelConstant.Property.name);
             sortingModel.SetColumn(UnitModelConstant.Property.description);
             sortingModel.SortingParam(sortExpression);

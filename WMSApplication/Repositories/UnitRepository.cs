@@ -39,9 +39,9 @@ namespace WMSApplication.Repositories
             return units;
         }
 
-        public async Task<Unit> FindAsyncById(int id)
+        public async Task<Unit> FindAsyncById(string code)
         {
-            return await base.FindByCondition(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            return await base.FindByCondition(x => x.Code.Equals(code)).FirstOrDefaultAsync();
         }
 
         public void Create(Unit unit)
