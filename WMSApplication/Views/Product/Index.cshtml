@@ -63,12 +63,6 @@
                     </a>
                 </th>
                 <th>
-                    <i class="@sortingModel.GetColumn("wholePrice").SortIcon" aria-hidden="true" style="font-size:12px"></i>
-                    <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("wholePrice").SortExpression">
-                        @Html.DisplayNameFor(model => model.WholePrice)
-                    </a>
-                </th>
-                <th>
                     <i class="@sortingModel.GetColumn("categoryCode").SortIcon" aria-hidden="true" style="font-size:12px"></i>
                     <a asp-action="Index" asp-route-pageIndex="@pagingModel.CurrentPage" asp-route-pageSize="@pagingModel.PageSize" asp-route-seacrhText="@pagingModel.SearchText" asp-route-sortExpression="@sortingModel.GetColumn("categoryCode").SortExpression">
                         @Html.DisplayNameFor(model => model.CategoryCode)
@@ -104,9 +98,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.LoosePrice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WholePrice)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CategoryCode)

@@ -87,9 +87,13 @@ namespace WMSApplication.Controllers
             {
                 Dictionary<string,string> imgProcessing = UploadPicture(product);
 
-                product.Picture = imgProcessing["picture"].ToString();
-                product.PictureExtension = imgProcessing["pictureExtension"].ToString();
-                product.PicturePath = imgProcessing["picturePath"].ToString();
+                if (imgProcessing.Count > 0)
+                {
+                    product.Picture = imgProcessing["picture"].ToString();
+                    product.PictureExtension = imgProcessing["pictureExtension"].ToString();
+                    product.PicturePath = imgProcessing["picturePath"].ToString();
+                }
+
                 product.CreatedBy = "admin";
                 product.ModifiedBy = "admin";
                 product.CreatedDate = DateTime.Now;
@@ -127,6 +131,16 @@ namespace WMSApplication.Controllers
         {
             try
             {
+                Dictionary<string, string> imgProcessing = UploadPicture(product);
+
+                if (imgProcessing.Count > 0)
+                {
+                    product.Picture = imgProcessing["picture"].ToString();
+                    product.PictureExtension = imgProcessing["pictureExtension"].ToString();
+                    product.PicturePath = imgProcessing["picturePath"].ToString();
+                }
+                
+
                 product.ModifiedBy = "admin";
                 product.ModifiedDate = DateTime.Now;
 
@@ -139,7 +153,7 @@ namespace WMSApplication.Controllers
             {
                 TempData["failed"] = "Modifying Data Failed";
 
-                return View();
+                return RedirectToAction(nameof(Edit), new { code = product.Code });
             }
 
             int currPage = 1;
@@ -163,8 +177,15 @@ namespace WMSApplication.Controllers
         {
             try
             {
+                string existPicture = _repository.Product.FindAsyncById(product.Code).Result.Picture;
+
                 _repository.Product.Delete(product);
                 await _repository.SaveAsync();
+
+                if (!string.IsNullOrEmpty(existPicture))
+                {
+                    DeletePictureInDirectory(existPicture);
+                }
             }
             catch (Exception ex)
             {
@@ -283,30 +304,59 @@ namespace WMSApplication.Controllers
 
         private Dictionary<string, string> UploadPicture(Product product)
         {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+
             string uniqueFilename = string.Empty;
             string uploadFolder = string.Empty;
             string filePath = string.Empty;
 
+            Product existProduct = _repository.Product.FindAsyncById(product.Code).Result;
+
             if (product.UploadedPicture != null)
-            {
+            { 
+                string existPicture = existProduct != null ? existProduct.Picture : string.Empty;
+
                 uploadFolder = Path.Combine(_webhost.WebRootPath, "products");
-
-                uniqueFilename = Guid.NewGuid().ToString() + "_" + product.UploadedPicture.FileName;
-
+                uniqueFilename = product.Code + "_" + product.UploadedPicture.FileName;
                 filePath = Path.Combine(uploadFolder, uniqueFilename);
 
                 using(var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     product.UploadedPicture.CopyTo(fileStream);
                 }
+
+                // For Update Data
+                if (!string.IsNullOrEmpty(existPicture))
+                {
+                    DeletePictureInDirectory(existPicture);
+                }
+
+                result["picture"] = uniqueFilename;
+                result["pictureExtension"] = Path.GetExtension(product.UploadedPicture.FileName);
+                result["picturePath"] = filePath;
+            }
+            else
+            {
+                if (existProduct != null)
+                {
+                    result["picture"] = existProduct.Picture;
+                    result["pictureExtension"] = existProduct.PictureExtension;
+                    result["picturePath"] = existProduct.PicturePath;
+                }
             }
 
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            result["picture"] = uniqueFilename;
-            result["pictureExtension"] = Path.GetExtension(product.UploadedPicture.FileName);
-            result["picturePath"] = filePath;
-
             return result;
+        }
+
+        private void DeletePictureInDirectory(string existPicture)
+        {
+            string uploadFolder = Path.Combine(_webhost.WebRootPath, "products");
+
+            FileInfo pict = new FileInfo(Path.Combine(uploadFolder, existPicture));
+            if (pict != null)
+            {
+                pict.Delete();
+            }
         }
         #endregion
     }

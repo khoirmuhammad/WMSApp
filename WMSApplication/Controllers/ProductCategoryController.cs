@@ -110,7 +110,7 @@ namespace WMSApplication.Controllers
             {
                 TempData["failed"] = "Modifying Data Failed";
 
-                return View();
+                return RedirectToAction(nameof(Edit), new { code = productCategory.Code });
             }
 
             int currPage = 1;

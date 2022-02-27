@@ -97,7 +97,7 @@ namespace WMSApplication.Controllers
             {
                 TempData["failed"] = "Modifying Data Failed";
 
-                return View();
+                return RedirectToAction(nameof(Edit), new { code = unit.Code });
             }
 
             int currPage = 1;
