@@ -33,7 +33,7 @@ namespace WMSApplication.Models
         [Display(Name = "Whole Price")]
         public decimal WholePrice { get; set; }
 
-        public string Picture { get; set; }
+        public string Picture { get; set; } // Picture Name
         public string PictureExtension { get; set; }
         public string PicturePath { get; set; }
 

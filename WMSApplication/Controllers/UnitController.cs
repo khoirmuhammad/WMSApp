@@ -8,6 +8,8 @@ using WMSApplication.Models;
 using WMSApplication.Constants;
 using WMSApplication.Helpers;
 using WMSApplication.CustomModels;
+using WMSApplication.Models.Validations;
+using FluentValidation.Results;
 
 namespace WMSApplication.Controllers
 {
@@ -97,7 +99,7 @@ namespace WMSApplication.Controllers
             {
                 TempData["failed"] = "Modifying Data Failed";
 
-                return View();
+                return RedirectToAction(nameof(Edit), new { code = unit.Code });
             }
 
             int currPage = 1;
@@ -133,6 +135,20 @@ namespace WMSApplication.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+
+        [HttpGet]
+        public async Task<bool> IsUnique(string code)
+        {
+            IEnumerable<Unit> units = await _repository.Unit.FindAllAsync();
+
+            if (units.Count() == 0)
+                return true;
+
+            bool isUnique = !units.Any(x => x.Code == code);
+            return isUnique;
+        }
+
 
         #region Support Methods
         private static PagingModel PagingSetup(string sortExpression, int pageIndex, int pageSize, IEnumerable<Unit> units)

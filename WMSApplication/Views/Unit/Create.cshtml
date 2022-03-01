@@ -5,12 +5,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" id="createForm">
+        <form asp-action="Create" id="createForm" onsubmit="return ValidateForm()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+                <input asp-for="Code" class="form-control" id="code-input" />
+                <span asp-validation-for="Code" class="text-danger" id="code-validation"></span>
+                <input type="hidden" id="code-hidden" value="" />
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -47,6 +48,21 @@
             }
         });
 
+        $('#code-input').on('blur', async function () {
+            let value = $(this).val();
+
+            let isUnique = await Get('Unit/IsUnique?code=' + value);
+
+            if (!isUnique) {
+                document.getElementById('code-hidden').value = 'Code should be unique';
+                document.getElementById('code-validation').innerHTML = 'Code should be unique';
+                return;
+            } else {
+                document.getElementById('code-hidden').value = '';
+                document.getElementById('code-validation').innerHTML = '';
+            }
+        })
+
         //$("body").on("submit", "#createForm", function () {
         //    //return confirm("Do you want to save data?");
         //});
@@ -76,6 +92,33 @@
             let ctrlDiv = document.getElementById('myFailedModalAlertBody');
             ctrlDiv.innerHTML = message;
             $('#myFailedModal').modal('show');
+        }
+
+        function Get(endpoint) {
+
+            return fetch('https://localhost:44315/' + endpoint)
+                .then(response => {
+                    if (response.status !== 401) {
+                        return response.json();
+                    } else {
+                        return response;
+                    }
+                })
+                .then(response => {
+                    return response;
+                })
+                .catch(error => {
+                    return error;
+                });
+        }
+
+        function ValidateForm() {
+            if (document.getElementById('code-hidden').value != '') {
+                document.getElementById('code-validation').innerHTML = 'Code should be unique';
+                return false;
+            }
+
+            return true;
         }
     </script>
 }

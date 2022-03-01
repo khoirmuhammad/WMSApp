@@ -40,6 +40,7 @@
                 <div class="form-group col-md-4">
                     <label asp-for="UnitCode" class="control-label"></label>
                     <select asp-for="UnitCode" class="form-control" asp-items="ViewBag.Units"></select>
+                    <span asp-validation-for="UnitCode" class="text-danger"></span>
                 </div>
             </div>
 
@@ -92,7 +93,7 @@
 
             <div class="col-4 row">
                 <div class="form-group col-12 justify-content-center align-middle mb-0 pb-0">
-                    <img id="previewPicture" src="~/images/no-image-icon.jpg" alt="Logo-Image" width="200" height="200" style="border:1px;margin-top:10px; margin-bottom:20px" />
+                    <img id="previewPicture" src="~/products/no-image-icon.jpg" alt="Logo-Image" width="200" height="200" style="border:1px;margin-top:10px; margin-bottom:20px" />
                 </div>
             </div>
 
@@ -206,6 +207,8 @@
             }
 
             return true;
+            
+
         }
     </script>
 }
