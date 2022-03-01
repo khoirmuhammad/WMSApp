@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WMSApplication.Extensions;
+using WMSApplication.Valdators;
 
 namespace WMSApplication
 {
@@ -26,7 +28,15 @@ namespace WMSApplication
         {
             services.ConfigureContext(Configuration);
             services.ConfigureRepository();
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews(options => 
+            {
+                options.Filters.Add(new ValidationFilter());
+            })
+            .AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

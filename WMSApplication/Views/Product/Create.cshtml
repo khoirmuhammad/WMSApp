@@ -40,6 +40,7 @@
                 <div class="form-group col-md-4">
                     <label asp-for="UnitCode" class="control-label"></label>
                     <select asp-for="UnitCode" class="form-control" asp-items="ViewBag.Units"></select>
+                    <span asp-validation-for="UnitCode" class="text-danger"></span>
                 </div>
             </div>
 
@@ -206,6 +207,8 @@
             }
 
             return true;
+            
+
         }
     </script>
 }
