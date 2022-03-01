@@ -14,6 +14,7 @@ namespace WMSApplication.Repositories
         private IUnitRepository _unit;
         private IProductCategoryRepository _productCategory;
         private IProductRepository _product;
+        private ILocationRepository _location;
 
         public RepositoryWrapper(ApplicationContext applicationContext)
         {
@@ -50,6 +51,17 @@ namespace WMSApplication.Repositories
                     _product = new ProductRepository(_applicationContext);
 
                 return _product;
+            }
+        }
+
+        public ILocationRepository Location
+        {
+            get
+            {
+                if (_location == null)
+                    _location = new LocationRepository(_applicationContext);
+
+                return _location;
             }
         }
 

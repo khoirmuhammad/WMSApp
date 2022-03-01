@@ -287,13 +287,13 @@ namespace WMSApplication.Controllers
                 Text = "FIFO - First In First Out"
             });
 
-            items.Insert(1, new SelectListItem()
+            items.Insert(2, new SelectListItem()
             {
                 Value = "LIFO",
                 Text = "LIFO - Last In First Out"
             });
 
-            items.Insert(1, new SelectListItem()
+            items.Insert(3, new SelectListItem()
             {
                 Value = "FEFO",
                 Text = "FEFO - First Expired First Out"
