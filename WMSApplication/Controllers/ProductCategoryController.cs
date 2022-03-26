@@ -82,7 +82,7 @@ namespace WMSApplication.Controllers
             {
                 TempData["failed"] = "Saving Data Failed";
 
-                return View();
+                return View(productCategory);
             }
 
             return RedirectToAction(nameof(Index));

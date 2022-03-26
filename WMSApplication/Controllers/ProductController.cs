@@ -53,7 +53,7 @@ namespace WMSApplication.Controllers
 
             if (products.Count().Equals(0))
             {
-                product.Code = "P-00001";
+                product.Code = StringHelper.GenerateUniqueCode("P-", 5, 0); //"P-00001";
             }
             else
             {
@@ -65,10 +65,7 @@ namespace WMSApplication.Controllers
 
             product.WholeUnit = "Box";
 
-            
-            ViewBag.ProductCategories = ProductCategories();
-            ViewBag.Units = Units();
-            ViewBag.AllocationType = AllocationTypes();
+            SetViewBagOnCreate();
 
             return View(product);
         }
@@ -106,8 +103,8 @@ namespace WMSApplication.Controllers
             catch(Exception ex)
             {
                 TempData["failed"] = "Saving Data Failed";
-
-                return View();
+                SetViewBagOnCreate();
+                return View(product);
             }
 
             return RedirectToAction(nameof(Index));
@@ -287,13 +284,13 @@ namespace WMSApplication.Controllers
                 Text = "FIFO - First In First Out"
             });
 
-            items.Insert(1, new SelectListItem()
+            items.Insert(2, new SelectListItem()
             {
                 Value = "LIFO",
                 Text = "LIFO - Last In First Out"
             });
 
-            items.Insert(1, new SelectListItem()
+            items.Insert(3, new SelectListItem()
             {
                 Value = "FEFO",
                 Text = "FEFO - First Expired First Out"
@@ -357,6 +354,13 @@ namespace WMSApplication.Controllers
             {
                 pict.Delete();
             }
+        }
+
+        private void SetViewBagOnCreate()
+        {
+            ViewBag.ProductCategories = ProductCategories();
+            ViewBag.Units = Units();
+            ViewBag.AllocationType = AllocationTypes();
         }
         #endregion
     }

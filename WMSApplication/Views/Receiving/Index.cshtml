@@ -1,0 +1,188 @@
+﻿@model List<WMSApplication.Models.Asn>
+    <!-- DataTables -->
+<link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<style>
+    .receivingTbl {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    #receiving th, td {
+        white-space: nowrap;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+        bottom: .5em;
+    }
+
+    .txt-size {
+        font-size: 12px;
+    }
+
+    .form-control-sm {
+        font-size: 12px;
+    }
+
+    .btn-xs {
+        padding: 1px 5px;
+        font-size: 12px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+
+    /*Change datatable font size*/
+    #receiving_info, #receiving_length, #receiving_filter, #receiving_paginate {
+        font-size: 12px;
+    }
+</style>
+
+<div class="container-fluid btn-group">
+    <div class="col-10">
+        <h3>Index</h3>
+    </div>
+    <div class="col-2 justify-content-end">
+        <p><a asp-action="Create" class="btn btn-success btn-sm">Create New</a></p>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table id="receiving" class="table table-striped table-bordered table-sm receivingTbl" cellspacing="0" width="100%">
+        <thead>
+            <tr class="txt-size">
+                <th>
+                    Order No
+                </th>
+                <th>
+                    PO No
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Supplier Address
+                </th>
+                <th>
+                    Supplier Email
+                </th>
+                <th>
+                    Supplier Phone
+                </th>
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Release Date
+                </th>
+                <th>
+                    Receiving Date
+                </th>
+                <th>
+                    Remark
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr class="txt-size">
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].PONumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].SupplierName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].SupplierAddress)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].SupplierMail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].SupplierPhone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Status)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].ReleaseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].ReceivingDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem[i].Remark)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-code="@Model[i].Code">
+                            <span class="btn btn-xs btn-outline-info">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Details" asp-route-code="@Model[i].Code">
+                            <span class="btn btn-xs btn-outline-warning">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <a asp-action="Delete" asp-route-code="@Model[i].Code">
+                            <span class="btn btn-xs btn-outline-danger">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+@section scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- DataTables -->
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        function openSuccessModal(message) {
+            let ctrlDiv = document.getElementById('mySuccessModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#mySuccessModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            let message = "@TempData["success"]";
+            if (message) {
+                openSuccessModal(message)
+            }
+
+            $('#receiving').DataTable({
+                "scrollX": true,
+                "autoWidth": true
+            });
+
+            $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
+}

@@ -1,0 +1,550 @@
+﻿@model WMSApplication.Models.Asn
+<!-- DataTables -->
+<link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<style>
+    .AsnDetailWrapper {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    #AsnDetail th, td {
+        white-space: nowrap;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+        bottom: .5em;
+    }
+
+    .display-visible {
+        display: block;
+    }
+
+    .display-invisible {
+        display: none;
+    }
+
+    .disabled {
+        pointer-events: none;
+    }
+</style>
+
+<h4>Asn</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" id="editForm" enctype="multipart/form-data" onsubmit="return true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" readonly />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="PONumber" class="control-label"></label>
+                    <input asp-for="PONumber" class="form-control" />
+                    <span asp-validation-for="PONumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Status" class="control-label"></label>
+                    <input asp-for="Status" class="form-control" readonly />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="SupplierName" class="control-label"></label>
+                    <input asp-for="SupplierName" class="form-control" />
+                    <span asp-validation-for="SupplierName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="SupplierAddress" class="control-label"></label>
+                    <input asp-for="SupplierAddress" class="form-control" />
+                    <span asp-validation-for="SupplierAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="SupplierMail" class="control-label"></label>
+                    <input asp-for="SupplierMail" class="form-control" />
+                    <span asp-validation-for="SupplierMail" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="SupplierPhone" class="control-label"></label>
+                    <input asp-for="SupplierPhone" class="form-control" />
+                    <span asp-validation-for="SupplierPhone" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Remark" class="control-label"></label>
+                    <textarea asp-for="Remark" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Remark" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="hidden" id="DocName" asp-for="DocName"/>
+                    <input asp-for="DocUploaded" class="custom-file-input" id="DocUploaded" />
+                    <label class="custom-file-label" for="DocUploaded" id="DocUploadedCaption">
+                        @(!string.IsNullOrEmpty(Model.DocName) ? Model.DocName : "Choose File")
+                    </label>
+                    <span asp-validation-for="DocUploaded" class="text-danger" id="DocUploadedValidation"></span>
+                </div>
+
+            </div>
+
+            <br />
+
+            <div id="AsnDetailDiv" class="col-md-12">
+                <table id="AsnDetail" class="table table-striped table-bordered table-sm AsnDetailWrapper" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Line No</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit (UOM)</th>
+                            <th>Production Date</th>
+                            <th>Expiry Date</th>
+                            <th>Line Status</th>
+                            <th>Receiving Area</th>
+                            <th>Remark</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.AsnDetails.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @*@Html.HiddenFor(x => x.AsnDetails[i].Id)*@
+                                    @Html.EditorFor(x => x.AsnDetails[i].LineNumber, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(x => x.AsnDetails[i].ProductCode, @ViewBag.Products as List<SelectListItem>, new { @class = "form-control", @onchange = "SetProductName(this)" })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].ProductName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].OriginalQty, new { htmlAttributes = new { @class = "form-control" } })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(x => x.AsnDetails[i].OriginalUnit, new SelectList(string.Empty, "code", "code"), new { @class = "form-control" })
+                                    <input type="hidden" id="hdOriginalUnit-@i" value="@Model.AsnDetails[i].OriginalUnit" />
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].ProductionDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].ExpiryDate, new { htmlAttributes = new { @class = "form-control" } })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].LineStatus, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(x => x.AsnDetails[i].ReceivingArea, @ViewBag.ReceivingAreas as List<SelectListItem>, new { @class = "form-control" })
+                                    <span class="text-danger"></span>
+                                </td>
+                                <td>
+                                    @Html.EditorFor(x => x.AsnDetails[i].Remark, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    <button id="btnAdd-@i" type="button" class="btn btn-sm btn-secondary display-visible" onclick="AddItem(this)"><i class="fa fa-plus"></i></button>
+                                    <button id="btnDelete-@i" type="button" class="btn btn-sm btn-danger display-invisible" onclick="DeleteItem(this)"><i class="fa fa-trash"></i></button>
+
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <input type="hidden" id="hdnLastIndex" value="0" />
+
+            <hr />
+
+            <div class="form-group btn-group">
+
+                <a class="btn btn-dark" asp-action="Index" asp-route-pageIndex="@TempData["currentPage"]"> Back</a>
+                <input type="button" id="btnDraft" value="Save As Draft" class="btn btn-primary" />
+                <input type="button" id="btnSubmit" value="Submit" class="btn btn-success" />
+                <input type="hidden" id="hdBbtnAction" name="hdBbtnAction" value="asdf" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- DataTables -->
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        var table;
+        var rows;
+        var asnDetailElement;
+
+        $(document).ready(async function () {
+
+            let message = "@TempData["failed"]";
+            if (message) {
+                openFailedModal(message)
+            }
+
+            let hasSubmitted = $('#Status').val() == '2' ? true : false;
+
+            $('#AsnDetail').DataTable({
+                "scrollX": true,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": true
+            });
+
+            $('.dataTables_length').addClass('bs-select');
+
+            table = document.getElementById('AsnDetail');
+            rows = table.getElementsByTagName('tr');
+
+            asnDetailElement = rows[rows.length - 1].outerHTML;
+
+            let countRows = $('#AsnDetail > tbody  > tr').length;
+            let lastIndexRow = countRows - 1;
+            for (let i = 0; i < countRows; i++) {
+
+                if (i == lastIndexRow) {
+                    if (hasSubmitted) {
+                        $('#btnAdd-' + lastIndexRow).addClass('disabled');
+                    }
+                }
+
+                if (i != lastIndexRow) {
+
+                    if (hasSubmitted) {                       
+                        $('#btnDelete-' + i).addClass('disabled');
+                    }
+                    // Set button
+                    $('#btnAdd-' + i).removeClass('display-visible');
+                    $('#btnAdd-' + i).addClass('display-invisible');
+
+                    $('#btnDelete-' + i).removeClass('display-invisible');
+                    $('#btnDelete-' + i).addClass('display-visible');
+
+                    //Set dropdown unit according to product
+                    let product = $('#AsnDetails_' + i + '__ProductCode').val();
+                    let originalUnitValue = await GetJson('Receiving/GetUnitOfProduct?code=' + product);
+
+                    let ddlUnits = $('#AsnDetails_'+i+'__OriginalUnit');
+                    ddlUnits.empty();
+
+                    $(originalUnitValue).each(function () {
+                        let option = $("<option />");
+                        option.html(this.text);
+                        option.val(this.value);
+                        ddlUnits.append(option);
+                    });
+
+                    let selectedUnit = $('#hdOriginalUnit-' + i).val();
+                    $('#AsnDetails_' + i + '__OriginalUnit option[value=' + selectedUnit+']').attr('selected', 'selected');
+
+                }
+            }
+
+            
+
+            if (hasSubmitted) {
+                $('#btnDraft').addClass('disabled');
+                $('#btnSubmit').addClass('disabled');
+            }
+
+        });
+
+        $('.custom-file-input').on('change', function () {
+            debugger;
+            // get file name
+            let filename = $(this).val().split('\\').pop();
+
+            // get file size
+            let fileSize = $(this)[0].files[0].size;
+
+            // get file extension
+            let fileExt = filename.split('.').pop();
+
+            // image validation
+            if (!IsFileValid(fileSize, fileExt)) {
+                $(this).val(null);
+                return false;
+            }
+
+            // if pass the validation, set hidden value
+            document.getElementById('DocName').value = filename;
+
+            // in order to set filename into label picture
+            $(this).siblings('.custom-file-label').addClass('selected').html(filename);
+
+
+        })
+
+        $('#btnDraft').click(function () {
+            //set hidden value for what button is clicked
+            $('#hdBbtnAction').val('save');
+
+            // Modal is defined in _Layout.cshtml
+            let ctrlDiv = document.getElementById('myConfirmModalAlertBody');
+            ctrlDiv.innerHTML = 'Do you want to save data?';
+            $("#confirmModal").modal('show');
+        });
+
+        $('#btnSubmit').click(function () {
+
+            if (!ValidateForm())
+                return false;
+            //set hidden value for what button is clicked
+            $('#hdBbtnAction').val('submit');
+
+            // Modal is defined in _Layout.cshtml
+            let ctrlDiv = document.getElementById('myConfirmModalAlertBody');
+            ctrlDiv.innerHTML = 'Do you want to submit data?';
+            $("#confirmModal").modal('show');
+        });
+
+        $("#modal-btn-yes").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            $('#editForm').submit();
+        });
+
+        $("#modal-btn-no").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            return false;
+        });
+
+        function DeleteItem(btn) {
+            $(btn).closest('tr').remove();
+        }
+
+        function AddItem(btn) {
+
+            if (!ValidateRow(btn))
+                return false;
+
+            //var rowOuterHtml = rows[rows.length - 1].outerHTML;
+            let lastrowIdx = document.getElementById('hdnLastIndex').value;
+
+            let nextrowIdx = eval(lastrowIdx) + 1;
+
+            document.getElementById('hdnLastIndex').value = nextrowIdx;
+
+            asnDetailElement = asnDetailElement.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+            asnDetailElement = asnDetailElement.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+            asnDetailElement = asnDetailElement.replaceAll('btnAdd-' + lastrowIdx, 'btnAdd-' + nextrowIdx);
+            asnDetailElement = asnDetailElement.replaceAll('btnDelete-' + lastrowIdx, 'btnDelete-' + nextrowIdx);
+
+
+            let newRow = table.insertRow();
+            newRow.innerHTML = asnDetailElement;
+
+            let btnAddId = btn.id;
+            let btnDeleteId = btnAddId.replaceAll('btnAdd', 'btnDelete');
+
+            let delbtn = document.getElementById(btnDeleteId);
+            delbtn.classList.add("display-visible");
+            delbtn.classList.remove("display-invisible");
+
+
+            let addbtn = document.getElementById(btnAddId);
+            addbtn.classList.remove("display-visible");
+            addbtn.classList.add("display-invisible");
+
+            //set line number
+            let lineElement = "AsnDetails_[line]__LineNumber";
+            lineElement = lineElement.replace('[line]', nextrowIdx);
+            $('#' + lineElement).val(nextrowIdx + 1);
+        }
+
+        async function SetProductName(element) {
+            let productCodeValue = element.value;
+            let currentElementId = element.id;
+
+            let productNameValue = await GetText('Receiving/GetProductName?code=' + productCodeValue);
+            let originalUnitValue = await GetJson('Receiving/GetUnitOfProduct?code=' + productCodeValue)
+
+            let productNameId = currentElementId.split('__').shift() + '__ProductName';
+            let originalUnitId = currentElementId.split('__').shift() + '__OriginalUnit';
+
+
+            document.getElementById(productNameId).value = productNameValue;
+
+            var ddlUnits = $("#" + originalUnitId);
+            ddlUnits.empty();
+
+            $(originalUnitValue).each(function () {
+                var option = $("<option />");
+                option.html(this.text);
+                option.val(this.value);
+                ddlUnits.append(option);
+            });
+        }
+
+        function IsFileValid(fileSize, fileExt) {
+            let error = '';
+            error = IsFileSizeValid(fileSize);
+            error = IsFileExtensionValid(fileExt);
+
+            if (error != '') {
+                document.getElementById('DocUploadedValidation').innerHTML = error;
+                return false;
+            } else {
+                document.getElementById('DocUploadedValidation').innerHTML = '';
+                return true;
+            }
+        }
+
+        function IsFileSizeValid(fileSize) {
+            let pictSizeInKb = Math.round(fileSize / 1024);
+            if (pictSizeInKb > 1024) {
+                return "File size over 1 MB is not allowed";
+            }
+
+            return '';
+        }
+
+        function IsFileExtensionValid(fileExt) {
+            if (fileExt != 'doc' && fileExt != 'docx') {
+                return 'File should be doc or docx in extension';
+            }
+
+            return '';
+        }
+
+        function ValidateRow(btn) {
+            let errorCount = 0;
+
+            $('#' + btn.id).parent().siblings().each(function () { // Get all td element
+                let elementId = $(this)[0].children[0].id; // get control element within td
+                let elementValue = $('#' + elementId).val();
+
+                let hasSibblings = $('#' + elementId).siblings().length > 0 ? true : false; // check control element has span error element
+                let hasSpanError = false;
+
+                if (hasSibblings) {
+                    hasSpanError = $('#' + elementId).siblings()[0].className == 'text-danger' ? true : false;
+                }
+
+                if (hasSibblings && hasSpanError) {
+                    if (elementValue == undefined || elementValue == null || elementValue == '' || elementValue == 0) {
+                        errorCount = errorCount + 1;
+                        $('#' + elementId).siblings().html('Required*');
+                    } else {
+                        $('#' + elementId).siblings().html('');
+                    }
+                }
+            });
+
+            if (errorCount > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function ValidateForm() {
+            let errorCount = 0;
+
+            let validatePONo = SetSpanError('PONumber');
+            let validateSupplierName = SetSpanError('SupplierName');
+            let validateSupplierAddress = SetSpanError('SupplierAddress');
+            let validateSupplierMail = SetSpanError('SupplierMail');
+            let validateSupplierPhone = SetSpanError('SupplierPhone');
+
+            errorCount = errorCount + validatePONo + validateSupplierName + validateSupplierAddress + validateSupplierMail + validateSupplierPhone;
+
+            return errorCount > 0 ? false : true;
+
+        }
+
+        function openFailedModal(message) {
+            let ctrlDiv = document.getElementById('myFailedModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#myFailedModal').modal('show');
+        }
+
+        function SetSpanError(id) {
+
+            let countError = 0;
+
+            if ($('#' + id).val() == '') {
+                $('#' + id).siblings(":last").html('*Required');
+                return countError + 1;
+            } else {
+                $('#' + id).siblings(":last").html('');
+                return countError;
+            }
+        }
+
+        function GetText(endpoint) {
+            return fetch('https://localhost:44315/' + endpoint, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'text/plain'
+                }
+            })
+                .then(response => {
+                    if (response.status !== 401) {
+                        return response.text();
+                    } else {
+                        return response;
+                    }
+                })
+                .then(response => {
+                    return response;
+                })
+                .catch(error => {
+                    return error;
+                });
+        }
+
+        function GetJson(endpoint) {
+
+            return fetch('https://localhost:44315/' + endpoint)
+                .then(response => {
+                    if (response.status !== 401) {
+                        return response.json();
+                    } else {
+                        return response;
+                    }
+                })
+                .then(response => {
+                    return response;
+                })
+                .catch(error => {
+                    return error;
+                });
+        }
+    </script>
+}
