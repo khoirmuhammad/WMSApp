@@ -11,6 +11,8 @@ namespace WMSApplication.Contracts
         IProductCategoryRepository ProductCategory { get; }
         IProductRepository Product { get; }
         ILocationRepository Location { get; }
+        IAsnRepository Asn { get; }
+        IAsnDetailRepository AsnDetail { get; }
 
         Task SaveAsync();
     }

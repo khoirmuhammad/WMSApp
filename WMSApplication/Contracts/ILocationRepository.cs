@@ -12,8 +12,8 @@ namespace WMSApplication.Contracts
         Task<IEnumerable<Location>> FindAllAsync();
         Task<IEnumerable<Location>> FindAllAsync(string sortProperty, SortOrder sortOrder, string searchText = "");
         Task<Location> FindAsyncById(string code);
-        void Create(Location product);
-        void Update(Location product);
-        void Delete(Location product);
+        void Create(Location location);
+        void Update(Location location);
+        void Delete(Location location);
     }
 }

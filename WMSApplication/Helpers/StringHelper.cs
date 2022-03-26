@@ -17,9 +17,6 @@ namespace WMSApplication.Helpers
 
         public static string GenerateUniqueCode(string prefixCode, int lengthCode, int currSequence)
         {
-            if (currSequence.Equals(0))
-                throw new ArgumentException("Error");
-
             string uniqueCode = prefixCode;
 
             for (int i = 0; i < lengthCode - currSequence.ToString().Length; i++)

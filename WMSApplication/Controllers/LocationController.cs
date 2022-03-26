@@ -75,8 +75,9 @@ namespace WMSApplication.Controllers
             catch (Exception ex)
             {
                 TempData["failed"] = "Saving Data Failed";
+                ViewBag.Type = Types();
 
-                return View();
+                return View(location);
             }
         }
 
