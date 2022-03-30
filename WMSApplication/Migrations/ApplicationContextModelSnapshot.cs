@@ -19,6 +19,183 @@ namespace WMSApplication.Migrations
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("WMSApplication.Models.Asn", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DocName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PONumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("ReceivingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(1)
+                        .HasColumnType("char(1)");
+
+                    b.Property<string>("SupplierAddress")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("SupplierMail")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("SupplierPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("Asn");
+                });
+
+            modelBuilder.Entity("WMSApplication.Models.AsnDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AsnCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("LineNumber")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LineStatus")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OriginalQty")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OriginalUnit")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("ProductCode")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ProductionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceivingArea")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AsnCode");
+
+                    b.ToTable("AsnDetail");
+                });
+
+            modelBuilder.Entity("WMSApplication.Models.Location", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("Floor")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Level")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("MaximumPallet")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("Pos")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("RackAisle")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("WMSApplication.Models.Product", b =>
                 {
                     b.Property<string>("Code")
@@ -116,6 +293,37 @@ namespace WMSApplication.Migrations
                     b.ToTable("ProductCategory");
                 });
 
+            modelBuilder.Entity("WMSApplication.Models.TransactionStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(1)
+                        .HasColumnType("char(1)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TransactionType")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TransactionStatus");
+                });
+
             modelBuilder.Entity("WMSApplication.Models.Unit", b =>
                 {
                     b.Property<string>("Code")
@@ -136,6 +344,15 @@ namespace WMSApplication.Migrations
                     b.ToTable("Unit");
                 });
 
+            modelBuilder.Entity("WMSApplication.Models.AsnDetail", b =>
+                {
+                    b.HasOne("WMSApplication.Models.Asn", "Asn")
+                        .WithMany("AsnDetails")
+                        .HasForeignKey("AsnCode");
+
+                    b.Navigation("Asn");
+                });
+
             modelBuilder.Entity("WMSApplication.Models.Product", b =>
                 {
                     b.HasOne("WMSApplication.Models.ProductCategory", "ProductCategory")
@@ -149,6 +366,11 @@ namespace WMSApplication.Migrations
                     b.Navigation("ProductCategory");
 
                     b.Navigation("Unit");
+                });
+
+            modelBuilder.Entity("WMSApplication.Models.Asn", b =>
+                {
+                    b.Navigation("AsnDetails");
                 });
 
             modelBuilder.Entity("WMSApplication.Models.ProductCategory", b =>

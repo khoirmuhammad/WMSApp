@@ -1,0 +1,107 @@
+﻿@model WMSApplication.Models.Location
+
+<h4>Location</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" id="editForm" onsubmit="return ValidateForm()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Code" />
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" readonly />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Floor" class="control-label"></label>
+                    <input asp-for="Floor" class="form-control" readonly />
+                    <span asp-validation-for="Floor" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="RackAisle" class="control-label"></label>
+                    <input asp-for="RackAisle" class="form-control" readonly />
+                    <span asp-validation-for="RackAisle" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="Level" class="control-label"></label>
+                    <input asp-for="Level" class="form-control" readonly />
+                    <span asp-validation-for="Level" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Pos" class="control-label"></label>
+                    <input asp-for="Pos" class="form-control" readonly />
+                    <span asp-validation-for="Pos" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-4">
+                    <label asp-for="Type" class="control-label"></label>
+                    <select asp-for="Type" class="form-control" asp-items="ViewBag.Type"></select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label asp-for="MaximumPallet" class="control-label"></label>
+                    <input asp-for="MaximumPallet" class="form-control" />
+                    <span asp-validation-for="MaximumPallet" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group btn-group">
+                <input type="button" id="btnSubmit" value="Save Changes" class="btn btn-primary" />
+                <a class="btn btn-dark" asp-action="Index" asp-route-pageIndex="@TempData["currentPage"]"> Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let message = "@TempData["failed"]";
+            if (message) {
+                openFailedModal(message)
+            }
+        });
+
+        $('#btnSubmit').click(function () {
+            // Modal is defined in _Layout.cshtml
+            let ctrlDiv = document.getElementById('myConfirmModalAlertBody');
+            ctrlDiv.innerHTML = 'Do you want to modify data?';
+            $("#confirmModal").modal('show');
+        });
+
+        $("#modal-btn-yes").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            $('#editForm').submit();
+        });
+
+        $("#modal-btn-no").on("click", function () {
+            // Modal is defined in _Layout.cshtml
+            $("#confirmModal").modal('hide');
+            return false;
+        });
+
+        function openFailedModal(message) {
+            let ctrlDiv = document.getElementById('myFailedModalAlertBody');
+            ctrlDiv.innerHTML = message;
+            $('#myFailedModal').modal('show');
+        }
+
+
+
+        function ValidateForm() {
+            
+        }
+    </script>
+}
+

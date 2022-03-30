@@ -14,6 +14,9 @@ namespace WMSApplication.Repositories
         private IUnitRepository _unit;
         private IProductCategoryRepository _productCategory;
         private IProductRepository _product;
+        private ILocationRepository _location;
+        private IAsnRepository _asn;
+        private IAsnDetailRepository _asnDetail;
 
         public RepositoryWrapper(ApplicationContext applicationContext)
         {
@@ -50,6 +53,39 @@ namespace WMSApplication.Repositories
                     _product = new ProductRepository(_applicationContext);
 
                 return _product;
+            }
+        }
+
+        public ILocationRepository Location
+        {
+            get
+            {
+                if (_location == null)
+                    _location = new LocationRepository(_applicationContext);
+
+                return _location;
+            }
+        }
+
+        public IAsnRepository Asn
+        {
+            get
+            {
+                if (_asn == null)
+                    _asn = new AsnRepository(_applicationContext);
+
+                return _asn;
+            }
+        }
+
+        public IAsnDetailRepository AsnDetail
+        {
+            get
+            {
+                if (_asnDetail == null)
+                    _asnDetail = new AsnDetailRepository(_applicationContext);
+
+                return _asnDetail;
             }
         }
 

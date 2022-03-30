@@ -129,7 +129,10 @@
             let pictExt = filename.split('.').pop();
 
             // image validation
-            IsPictureValid(pictSize, pictExt);
+            if (!IsPictureValid(pictSize, pictExt)) {
+                $(this).val(null);
+                return false;
+            }
 
             // if pass the validation, set hidden value
             document.getElementById('PicturePath').value = filename;
@@ -176,9 +179,10 @@
 
             if (error != '') {
                 document.getElementById('UploadedPictureValidation').innerHTML = error;
-                return;
+                return false;
             } else {
                 document.getElementById('UploadedPictureValidation').innerHTML = '';
+                return true;
             }
         }
 
