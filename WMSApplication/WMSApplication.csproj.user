@@ -12,5 +12,6 @@
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_DbContextTypeFullName>WMSApplication.Data.ApplicationContext</WebStackScaffolding_DbContextTypeFullName>
     <ShowAllFiles>true</ShowAllFiles>
+    <NameOfLastUsedPublishProfile>C:\Baseline\WMSApplication\WMSApplication\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
