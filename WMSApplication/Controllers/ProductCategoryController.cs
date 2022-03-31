@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using WMSApplication.Models;
 
 namespace WMSApplication.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class ProductCategoryController : Controller
     {
         private readonly IRepositoryWrapper _repository;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using WMSApplication.Models;
 
 namespace WMSApplication.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class LocationController : Controller
     {
         private readonly IRepositoryWrapper _repository;

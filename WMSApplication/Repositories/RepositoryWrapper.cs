@@ -18,6 +18,10 @@ namespace WMSApplication.Repositories
         private IAsnRepository _asn;
         private IAsnDetailRepository _asnDetail;
 
+        private IAuthUserRepository _authUser;
+        private IAuthRoleRepository _authRole;
+        private IAuthUserRoleRepository _authUserRole;
+
         public RepositoryWrapper(ApplicationContext applicationContext)
         {
             this._applicationContext = applicationContext;
@@ -86,6 +90,39 @@ namespace WMSApplication.Repositories
                     _asnDetail = new AsnDetailRepository(_applicationContext);
 
                 return _asnDetail;
+            }
+        }
+
+        public IAuthUserRepository AuthUser
+        {
+            get
+            {
+                if (_authUser == null)
+                    _authUser = new AuthUserRepository(_applicationContext);
+
+                return _authUser;
+            }
+        }
+
+        public IAuthRoleRepository AuthRole
+        {
+            get
+            {
+                if (_authRole == null)
+                    _authRole = new AuthRoleRepository(_applicationContext);
+
+                return _authRole;
+            }
+        }
+
+        public IAuthUserRoleRepository AuthUserRole
+        {
+            get
+            {
+                if (_authUserRole == null)
+                    _authUserRole = new AuthUserRoleRepository(_applicationContext);
+
+                return _authUserRole;
             }
         }
 

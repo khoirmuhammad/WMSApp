@@ -14,6 +14,10 @@ namespace WMSApplication.Contracts
         IAsnRepository Asn { get; }
         IAsnDetailRepository AsnDetail { get; }
 
+        IAuthUserRepository AuthUser { get; }
+        IAuthRoleRepository AuthRole { get; }
+        IAuthUserRoleRepository AuthUserRole { get; }
+
         Task SaveAsync();
     }
 }

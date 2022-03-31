@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using FluentValidation.Results;
 
 namespace WMSApplication.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class UnitController : Controller
     {
         private readonly IRepositoryWrapper _repository;

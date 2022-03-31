@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using WMSApplication.Models;
 
 namespace WMSApplication.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class ReceivingController : Controller
     {
         private readonly ApplicationContext _context;

@@ -1,0 +1,98 @@
+﻿@model WMSApplication.Models.AuthUser
+
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    returnUrl = System.Net.WebUtility.UrlEncode(returnUrl);
+}
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <form asp-action="Login" asp-route-ReturnUrl="@returnUrl" id="loginForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+                <label asp-for="Username" class="form-label">Username</label>
+                <input asp-for="Username" type="email" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <!-- 2 column grid layout for inline styling -->
+            <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                    <!-- Checkbox -->
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               value=""
+                               id="form2Example31"
+                               checked />
+                        <label class="form-check-label" for="form2Example31"> Remember me </label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <!-- Simple link -->
+                    <a href="#!">Forgot password?</a>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <button type="button" id="btnSignin" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+            <!-- Register buttons -->
+            <div class="text-center">
+                <p>Not a member? <a href="#!">Register</a></p>
+                <p>or sign up with:</p>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-facebook-f"></i>
+                </button>
+
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-google"></i>
+                </button>
+
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-twitter"></i>
+                </button>
+
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                    <i class="fab fa-github"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+            let message = "@TempData["failed"]";
+            if (message) {
+                openFailedModal(message)
+            }
+    });
+
+    $('#btnSignin').click(function () {
+        $('#loginForm').submit();
+    });
+
+
+    function openFailedModal(message) {
+        let ctrlDiv = document.getElementById('myFailedModalAlertBody');
+        ctrlDiv.innerHTML = message;
+        $('#myFailedModal').modal('show');
+    }
+    </script>
+
+}

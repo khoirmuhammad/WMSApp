@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +30,14 @@ namespace WMSApplication
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.ConfigureContext(Configuration);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/"; // or you can type "/Auth/Index";
+                options.AccessDeniedPath = "/Denied";
+            });
+
             services.ConfigureRepository();
 
             services.AddControllersWithViews(options => 
@@ -58,14 +67,14 @@ namespace WMSApplication
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Auth}/{action=Index}/{id?}");
             });
         }
     }

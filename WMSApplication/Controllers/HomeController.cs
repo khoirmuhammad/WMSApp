@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,12 +22,14 @@ namespace WMSApplication.Controllers
             _configuration = configuration;
         }
 
+        [Authorize(Roles = "SuperAdmin,User")]
         public IActionResult Index()
         {
             ViewBag.AppName = _configuration.GetSection("AppName").Value;
             return View();
         }
 
+        [Authorize(Roles = "SuperAdmin,User")]
         public IActionResult Privacy()
         {
             return View();

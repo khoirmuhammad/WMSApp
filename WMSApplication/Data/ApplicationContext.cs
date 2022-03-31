@@ -24,13 +24,21 @@ namespace WMSApplication.Data
             modelBuilder.ApplyConfiguration(new TransactionStatusConfiguration());
             modelBuilder.ApplyConfiguration(new AsnConfiguration());
             modelBuilder.ApplyConfiguration(new AsnDetailConfiguration());
+
+            modelBuilder.ApplyConfiguration(new AuthUserConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthUserRoleConfiguration());
         }
 
         public DbSet<Unit> Units { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Location> Location { get; set; }
-        public DbSet<WMSApplication.Models.Asn> Asn { get; set; }
+        public DbSet<Asn> Asn { get; set; }
         public DbSet<AsnDetail> AsnDetail { get; set; }
+
+        public DbSet<AuthUser> AuthUsers { get; set; }
+        public DbSet<AuthRole> AuthRoles { get; set; }
+        public DbSet<AuthUserRole> AuthUserRole { get; set; }
     }
 }
